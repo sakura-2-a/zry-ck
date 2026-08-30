@@ -1,1 +1,9 @@
+path: ./data/processed
+train: train/images
+val: val/images
+test: test/images
 
+nc: 2
+names:
+  0: scratch
+  1: crack
