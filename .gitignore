@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+.pytest_cache/
+.mypy_cache/
+
+# 模型权重与训练产物（大文件不入库）
+backend/weights/*.pt
+backend/artifacts/*
+backend/runs/
+datasets/kolektor_sdd/*
+!datasets/kolektor_sdd/.gitkeep
+
+# 前端
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.zip
