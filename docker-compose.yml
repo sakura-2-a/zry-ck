@@ -1,0 +1,70 @@
+# ===== 轴承表面缺陷智能检测系统 一键部署（M8 交付物） =====
+# 用法（项目根目录，需先完成离线训练产出 yolo_best.pt / svm_classifier.joblib）：
+#   docker compose up -d --build
+# 访问：前端 http://localhost:8080   后端接口文档 http://localhost:8000/docs
+#
+# 架构：Vue3 前端(nginx) → FastAPI 后端 → PostgreSQL(记录/统计) + Redis(结果缓存)
+#       模型权重通过 bind mount 注入后端容器（不烧进镜像，换模型只需重启容器）
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: bearing-postgres
+    environment:
+      POSTGRES_DB: bearing_defect
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: Asia/Shanghai
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bearing_defect"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    container_name: bearing-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: bearing-backend
+    environment:
+      TZ: Asia/Shanghai
+      DETECT_DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/bearing_defect
+      DETECT_REDIS_URL: redis://redis:6379/0
+      DETECT_REDIS_ENABLED: "true"
+      # 权重/产物路径：compose 卷挂载到容器内默认路径，无需改动
+    volumes:
+      - ./backend:/app/backend        # 代码 + weights/ + artifacts/（训练产物）
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: bearing-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  pg_data:
