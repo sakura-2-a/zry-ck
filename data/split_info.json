@@ -1,0 +1,83 @@
+{
+  "val_ratio": 0.2,
+  "seed": 42,
+  "min_area": 25,
+  "pieces": {
+    "train": [
+      "kos01",
+      "kos02",
+      "kos03",
+      "kos04",
+      "kos07",
+      "kos09",
+      "kos10",
+      "kos11",
+      "kos12",
+      "kos13",
+      "kos14",
+      "kos15",
+      "kos16",
+      "kos18",
+      "kos20",
+      "kos21",
+      "kos22",
+      "kos23",
+      "kos24",
+      "kos25",
+      "kos26",
+      "kos27",
+      "kos28",
+      "kos29",
+      "kos30",
+      "kos31",
+      "kos32",
+      "kos34",
+      "kos35",
+      "kos36",
+      "kos37",
+      "kos39"
+    ],
+    "val": [
+      "kos05",
+      "kos06",
+      "kos08",
+      "kos17",
+      "kos19",
+      "kos33",
+      "kos38",
+      "kos40"
+    ],
+    "test": [
+      "kos41",
+      "kos42",
+      "kos43",
+      "kos44",
+      "kos45",
+      "kos46",
+      "kos47",
+      "kos48",
+      "kos49",
+      "kos50"
+    ]
+  },
+  "stats": {
+    "train": {
+      "images": 255,
+      "defect_images": 33,
+      "normal_images": 222,
+      "boxes": 35
+    },
+    "val": {
+      "images": 64,
+      "defect_images": 9,
+      "normal_images": 55,
+      "boxes": 9
+    },
+    "test": {
+      "images": 80,
+      "defect_images": 10,
+      "normal_images": 70,
+      "boxes": 10
+    }
+  }
+}
